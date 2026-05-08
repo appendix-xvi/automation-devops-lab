@@ -1,4 +1,5 @@
 stages:
+  - validate
   - terraform_plan
   - terraform_apply
   - ansible_configure
@@ -8,7 +9,15 @@ variables:
   ANSIBLE_HOST_KEY_CHECKING: "False"
 
 before_script:
-  - echo "Starting CI/CD flow..."
+  - echo "Starting AWS infrastructure automation pipeline..."
+
+terraform_validate:
+  stage: validate
+  script:
+    - cd terraform
+    - terraform fmt -check -recursive
+    - terraform init -backend=false -input=false
+    - terraform validate
 
 terraform_plan:
   stage: terraform_plan
@@ -19,15 +28,23 @@ terraform_plan:
   artifacts:
     paths:
       - terraform/tfplan.out
+    expire_in: 1 week
 
 terraform_apply:
   stage: terraform_apply
+  when: manual
+  allow_failure: false
+  dependencies:
+    - terraform_plan
   script:
     - cd terraform
+    - terraform init -input=false
     - terraform apply -auto-approve tfplan.out
 
 ansible_configure:
   stage: ansible_configure
+  when: manual
+  allow_failure: false
   script:
     - cd ansible
     - ansible-playbook -i aws_ec2_inventory.py prometheus_grafana.yml
