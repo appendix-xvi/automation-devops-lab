@@ -1,46 +1,30 @@
-﻿# 🛠️ Automation DevOps Lab
+# AWS Infrastructure Automation Pipeline
 
-![Terraform Fmt](https://img.shields.io/badge/Terraform-formatted-623CE4?logo=terraform)
-![Ansible Verified](https://img.shields.io/badge/Ansible-tested-darkgreen?logo=ansible)
-![CI Pipeline](https://img.shields.io/badge/GitLab%20CI-pass-blueviolet?logo=gitlab)
-![Open to Work](https://img.shields.io/badge/Open--to--Work-Yes-brightgreen?style=flat-square)
+A DevOps lab that demonstrates end-to-end infrastructure automation on AWS using Terraform, Ansible, GitLab CI/CD, and a monitoring stack.
 
-## 🚀 DevOps Automation Lab
+The project is designed as a practical portfolio repository: it shows how infrastructure can be provisioned, configured, and validated through repeatable automation rather than manual setup.
 
-This repository showcases **real DevOps automation** in a hybrid infrastructure setup, combining Infrastructure as Code, automated provisioning pipelines, configuration management, and observability — all tied together with deployable code.
+## Overview
 
-> 🎯 Designed for hiring managers, engineers, and teams evaluating real-world DevOps skill sets
+This lab covers a complete infrastructure delivery flow:
 
----
+1. GitLab CI/CD runs the automation pipeline.
+2. Terraform provisions AWS infrastructure such as VPC, EC2, S3, and RDS.
+3. Ansible configures EC2 instances and installs application or monitoring components.
+4. Prometheus and Grafana provide basic observability for the deployed environment.
 
-## 🔧 Key Features
+## Capabilities
 
-| Capability                    | Tech Used                            |
-|------------------------------|--------------------------------------|
-| Infrastructure Provisioning  | Terraform (VPC, EC2, S3, RDS)         |
-| Configuration Management     | Ansible (Nginx, Prometheus, Grafana) |
-| Dynamic Inventory            | Ansible + Boto3 (EC2 sync)           |
-| IaC Automation Pipeline      | GitLab CI/CD                         |
-| Monitoring & Visualization   | Prometheus + Grafana                 |
-| Documentation                | Markdown + Diagrams                  |
+| Area | Implementation |
+|---|---|
+| Infrastructure provisioning | Terraform modules and AWS resources |
+| Configuration management | Ansible playbooks |
+| Dynamic inventory | Ansible with EC2 inventory integration |
+| CI/CD automation | GitLab CI/CD pipeline stages |
+| Monitoring | Prometheus and Grafana |
+| Documentation | Markdown and architecture diagrams |
 
----
-
-## 🆕 Feature 2026 Update (Reviewed)
-
-This repository has been reviewed and updated with a practical **2026 feature direction** focused on production readiness:
-
-- Add Terraform remote state + state locking (S3 + DynamoDB)
-- Add environment separation (`dev`, `staging`, `prod`) with reusable modules
-- Add security checks in CI (`tfsec`/`checkov`, `ansible-lint`)
-- Add containerized monitoring stack option (Prometheus + Grafana via Docker Compose)
-- Add GitOps-ready deployment path for Kubernetes expansion
-
-> Goal for 2026: move from portfolio lab to a reusable baseline for team infrastructure delivery.
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```text
 automation-devops-lab/
@@ -56,103 +40,75 @@ automation-devops-lab/
 │   ├── site.yml
 │   ├── prometheus_grafana.yml
 │   └── aws_ec2_inventory.py
-├── images/
-│   ├── infra-deploy-flow.png
-│   └── grafana-ui.png
+└── images/
+    ├── infra-deploy-flow.png
+    └── grafana-ui.png
 ```
 
----
+## Prerequisites
 
-## ⚙️ Use Case: End-to-End Infra Automation
-This lab emulates a production-like flow:
+- AWS account and IAM credentials
+- Terraform installed locally or available in the CI runner
+- Ansible installed locally or available in the CI runner
+- GitLab project with CI/CD enabled
+- Required AWS permissions for VPC, EC2, S3, and RDS resources
 
-- Code pushed → GitLab CI pipeline triggers
-- Terraform provisions VPC, EC2, S3, and RDS
-- Ansible installs Nginx, Prometheus, Grafana on EC2
-- Dynamic Inventory auto-syncs EC2 IPs
+## Quick Start
 
----
+Clone the repository:
 
-## 🖥️ Live Output
-
-| Tool       | Output Snapshot                                |
-|------------|-------------------------------------------------|
-| Terraform  | ✅ Applied Successfully (see outputs.tf)         |
-| Ansible    | ✅ Configured Nginx, Prometheus, Grafana         |
-| Grafana UI | ![grafana-ui](images/grafana-ui.png)            |
-
----
-
-## 👀 Who Is This For?
-
-- DevOps engineers/job seekers needing real, provable infrastructure work
-- Recruiters who want to see hands-on, not just theory
-- Anyone building a portfolio with live AWS/automation examples
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-- AWS Account & IAM Credentials
-- Terraform / Ansible installed
-- GitLab runner (self-hosted or SaaS)
-
-### Commands
 ```bash
-# Clone the repo
 git clone https://github.com/Nuntin/automation-devops-lab.git
 cd automation-devops-lab
+```
 
-# Terraform: provision infra
+Provision AWS infrastructure:
+
+```bash
 cd terraform
 terraform init
 terraform apply -auto-approve -var-file="terraform.tfvars"
+```
 
-# Ansible: configure EC2
+Run Ansible configuration:
+
+```bash
 cd ../ansible
 chmod +x aws_ec2_inventory.py
 ansible-playbook -i aws_ec2_inventory.py site.yml
 ansible-playbook -i aws_ec2_inventory.py prometheus_grafana.yml
 ```
 
----
+## Validation
 
-## ✅ Status
-- Infrastructure: ✔️ Terraform-based (VPC, EC2, S3, RDS)
-- Configuration: ✔️ Ansible Playbooks + Dynamic Inventory
-- Monitoring: ✔️ Prometheus + Grafana auto-deploy
-- IaC Pipeline: ✔️ GitLab CI (Terraform stages)
-- Diagram: ✔️ draw.io visualized
-- README: ✔️ English, structured, copyable
+After deployment, validate the environment by checking:
 
----
+- Terraform apply output and resource state
+- EC2 instance reachability
+- Ansible playbook success summary
+- Prometheus target health
+- Grafana dashboard availability
 
-## 🎯 Why I Built This Lab
-This project was built during a personal reset period — not to learn DevOps, but to rebuild it from first principles.
+## Planned Improvements
 
-I didn't just write Terraform, Ansible, and CI pipelines — I verified each commit by applying it on real infrastructure.
+The next improvement areas are focused on production readiness:
 
-It's my way of proving that even outside of a job, I never stopped building.
+- Terraform remote state and state locking with S3 and DynamoDB
+- Environment separation for `dev`, `staging`, and `prod`
+- Reusable Terraform modules
+- CI security checks using tools such as `tfsec`, `checkov`, and `ansible-lint`
+- Optional containerized monitoring stack for local testing
+- GitOps-ready deployment path for Kubernetes-based workloads
 
----
+## Notes
 
-## 👤 About Me – DevOps Engineer (Open to Work)
-Hi, I'm Nuntin – a DevOps / Infrastructure Engineer from Thailand 🇹🇭
-Currently looking for new opportunities in the field of DevOps and Cloud Infrastructure.
+- This repository is a lab environment, not a production-ready baseline.
+- Review IAM scope, network exposure, secrets handling, and cost impact before running it in a real AWS account.
+- Do not commit real credentials, private keys, or production configuration files.
 
-- Terraform, Ansible, GitLab CI/CD, Docker, Kubernetes
-- AWS: EC2, S3, IAM, RDS, VPC, CloudFront, Route53
-- Real use-case demo → see this repo!
+## Author
 
-📦 GitHub: [github.com/Nuntin](https://github.com/Nuntin)
+Nuntin Padmadin
 
-💼 LinkedIn: [linkedin.com/in/nuntin-padmadin-97b708145](https://www.linkedin.com/in/nuntin-padmadin-97b708145/)
-
-📧 Email: nuntin.p@gmail.com
-
----
-
-**SEO Keywords:**  
-`devops portfolio`, `terraform ansible automation`, `gitlab ci k8s pipeline`, `real aws infrastructure`, `cloud automation`, `open to work devops`, `grafana monitoring lab`
----
+- GitHub: [github.com/Nuntin](https://github.com/Nuntin)
+- LinkedIn: [linkedin.com/in/nuntin-padmadin-97b708145](https://www.linkedin.com/in/nuntin-padmadin-97b708145/)
